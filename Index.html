@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finance Your Business — One Click Advisor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --teal:    #0D9488;
+    --teal-d:  #0F766E;
+    --teal-t:  #F0FDF9;
+    --teal-b:  #99F6E4;
+    --rose:    #BE123C;
+    --rose-t:  #FFF1F2;
+    --rose-b:  #FECDD3;
+    --blue:    #1D4ED8;
+    --blue-t:  #EFF6FF;
+    --blue-b:  #BFDBFE;
+    --amber:   #92400E;
+    --amber-t: #FFFBEB;
+    --amber-b: #FDE68A;
+    --ink:     #111827;
+    --ink2:    #374151;
+    --muted:   #6B7280;
+    --hint:    #9CA3AF;
+    --surf:    #F9FAFB;
+    --line:    #E5E7EB;
+    --line2:   #F3F4F6;
+    --white:   #FFFFFF;
+    --font:    'DM Sans', sans-serif;
+  }
+
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body { font-family: var(--font); color: var(--ink); background: var(--white); -webkit-font-smoothing: antialiased; }
+
+  /* ── UTILITIES ────────────────────────────────── */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 99px;
+    white-space: nowrap;
+    line-height: 1.4;
+  }
+  .pill-free  { background: var(--teal-t); color: var(--teal-d); border: 0.5px solid var(--teal-b); }
+  .pill-paid  { background: var(--rose-t); color: var(--rose);   border: 0.5px solid var(--rose-b); }
+  .pill-book  { background: var(--blue-t); color: var(--blue);   border: 0.5px solid var(--blue-b); }
+
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 6px;
+  }
+  .sec-title {
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -.3px;
+    margin-bottom: 6px;
+  }
+  .sec-sub {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 24px;
+    max-width: 600px;
+  }
+
+  .btn-primary {
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background .15s;
+  }
+  .btn-primary:hover { background: var(--teal-d); }
+
+  .btn-outline {
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--teal);
+    border: 0.5px solid var(--teal);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background .15s;
+  }
+  .btn-outline:hover { background: var(--teal-t); }
+
+  /* ── NAV ──────────────────────────────────────── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    background: var(--white);
+    border-bottom: 0.5px solid var(--line);
+  }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo-mark {
+    width: 30px; height: 30px; background: var(--teal); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .logo-mark svg { width: 16px; height: 16px; stroke: #fff; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  .logo-text { font-size: 17px; font-weight: 500; letter-spacing: -.35px; color: var(--ink); }
+  .logo-text span { color: var(--teal); }
+  .nav-links { display: flex; gap: 2px; }
+  .nav-links a {
+    font-size: 14px; color: var(--muted); padding: 7px 12px;
+    border-radius: 7px; text-decoration: none; transition: color .15s, background .15s;
+  }
+  .nav-links a:hover { color: var(--ink); background: var(--surf); }
+  .nav-links a.active { color: var(--teal); font-weight: 500; }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .nav-login { font-size: 14px; color: var(--muted); text-decoration: none; }
+  .nav-login:hover { color: var(--ink); }
+
+  /* ── BREADCRUMB ───────────────────────────────── */
+  .breadcrumb-bar {
+    padding: 12px 40px;
+    border-bottom: 0.5px solid var(--line);
+    background: var(--surf);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--hint);
+  }
+  .breadcrumb-bar a { color: var(--muted); text-decoration: none; }
+  .breadcrumb-bar a:hover { color: var(--teal); }
+  .breadcrumb-bar .sep { color: var(--line); }
+  .breadcrumb-bar .current { color: var(--ink); font-weight: 500; }
+
+  /* ── PAGE HERO ────────────────────────────────── */
+  .page-hero {
+    background: var(--teal-t);
+    border-bottom: 0.5px solid var(--teal-b);
+    padding: 52px 40px 48px;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 48px;
+    align-items: center;
+  }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--teal-d);
+    background: var(--white);
+    border: 0.5px solid var(--teal-b);
+    border-radius: 99px;
+    padding: 5px 14px;
+    margin-bottom: 16px;
+  }
+  .eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); flex-shrink: 0; }
+  .page-hero h1 {
+    font-size: 38px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.2;
+    letter-spacing: -.6px;
+    margin-bottom: 14px;
+  }
+  .page-hero h1 strong { color: var(--teal); font-weight: 500; }
+  .page-hero p {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 24px;
+    max-width: 520px;
+  }
+  .hero-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  .hero-stats {
+    background: var(--white);
+    border: 0.5px solid var(--teal-b);
+    border-radius: 14px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .hero-stat-item { display: flex; align-items: flex-start; gap: 14px; }
+  .hero-stat-icon {
+    width: 36px; height: 36px; border-radius: 9px; background: var(--teal-t);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .hero-stat-icon svg { width: 18px; height: 18px; stroke: var(--teal); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .hero-stat-label { font-size: 12px; color: var(--muted); margin-bottom: 2px; }
+  .hero-stat-val { font-size: 15px; font-weight: 500; color: var(--ink); }
+
+  /* ── SECTIONS ─────────────────────────────────── */
+  section { padding: 52px 40px; border-bottom: 0.5px solid var(--line); }
+  section.surf { background: var(--surf); }
+  section.white { background: var(--white); }
+  section.teal-tint { background: var(--teal-t); border-bottom: 0.5px solid var(--teal-b); }
+
+  /* ── CATEGORY GRID ────────────────────────────── */
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 12px;
+  }
+  .cat-card {
+    background: var(--white);
+    border: 0.5px solid var(--line);
+    border-radius: 12px;
+    padding: 20px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: border-color .15s, box-shadow .15s;
+    cursor: pointer;
+  }
+  .cat-card:hover {
+    border-color: var(--teal-b);
+    box-shadow: 0 2px 12px rgba(13,148,136,.07);
+  }
+  .cat-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+  .cat-icon {
+    width: 36px; height: 36px; border-radius: 9px; background: var(--teal-t);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .cat-icon svg { width: 18px; height: 18px; stroke: var(--teal); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .cat-title { font-size: 15px; font-weight: 500; color: var(--ink); }
+  .cat-desc { font-size: 13px; color: var(--muted); line-height: 1.55; flex: 1; }
+  .cat-link { font-size: 13px; font-weight: 500; color: var(--teal); }
+
+  /* ── PARTNER STRIP ────────────────────────────── */
+  .partner-strip {
+    padding: 32px 40px;
+    background: var(--surf);
+    border-bottom: 0.5px solid var(--line);
+  }
+  .partner-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--hint);
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .partner-logos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .partner-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    opacity: .55;
+    transition: opacity .15s;
+  }
+  .partner-logo:hover { opacity: 1; }
+  .partner-logo-mark {
+    width: 32px; height: 32px; border-radius: 7px;
+    display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500;
+  }
+  .partner-logo-name { font-size: 14px; font-weight: 500; color: var(--ink2); }
+
+  /* ── CALCULATORS ──────────────────────────────── */
+  .calc-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 12px;
+  }
+  .calc-card {
+    background: var(--white);
+    border: 0.5px solid var(--line);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color .15s;
+  }
+  .calc-card:hover { border-color: var(--teal-b); }
+  .calc-glyph {
+    width: 44px; height: 44px; border-radius: 10px; background: var(--teal-t);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 500; color: var(--teal-d);
+    flex-shrink: 0; font-family: monospace;
+  }
+  .calc-body { flex: 1; }
+  .calc-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+  .calc-desc { font-size: 13px; color: var(--muted); line-height: 1.55; margin-bottom: 8px; }
+  .calc-cta { font-size: 13px; font-weight: 500; color: var(--teal); }
+
+  /* ── ADVISOR CTA BAND ─────────────────────────── */
+  .advisor-band {
+    background: var(--teal);
+    padding: 44px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+  }
+  .advisor-band-left {}
+  .advisor-band h2 { font-size: 22px; font-weight: 500; color: #fff; margin-bottom: 6px; }
+  .advisor-band p { font-size: 14px; color: rgba(255,255,255,.7); line-height: 1.65; max-width: 520px; }
+  .btn-advisor {
+    font-family: var(--font);
+    font-size: 14px; font-weight: 500; padding: 12px 24px; border-radius: 8px;
+    background: #fff; color: var(--teal-d); border: none; cursor: pointer;
+    white-space: nowrap; flex-shrink: 0; text-decoration: none;
+    transition: background .15s;
+  }
+  .btn-advisor:hover { background: var(--teal-t); }
+
+  /* ── ARTICLES ─────────────────────────────────── */
+  .art-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 12px;
+  }
+  .art-card {
+    background: var(--white);
+    border: 0.5px solid var(--line);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color .15s;
+  }
+  .art-card:hover { border-color: var(--teal-b); }
+  .art-meta { display: flex; align-items: center; gap: 10px; }
+  .art-cat {
+    font-size: 10px; font-weight: 500; text-transform: uppercase;
+    letter-spacing: .05em; color: var(--blue);
+  }
+  .art-date { font-size: 11px; color: var(--hint); }
+  .art-title { font-size: 15px; font-weight: 500; color: var(--ink); line-height: 1.4; }
+  .art-excerpt { font-size: 13px; color: var(--muted); line-height: 1.65; flex: 1; }
+  .art-author { font-size: 12px; color: var(--hint); }
+  .art-read { font-size: 13px; font-weight: 500; color: var(--teal); margin-top: 4px; }
+
+  /* ── FOOTER ───────────────────────────────────── */
+  footer {
+    background: var(--ink);
+    padding: 24px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-logo { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+  .footer-mark {
+    width: 24px; height: 24px; background: var(--teal); border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .footer-mark svg { width: 13px; height: 13px; stroke: #fff; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  .footer-name { font-size: 13px; color: rgba(255,255,255,.4); }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a { font-size: 12px; color: rgba(255,255,255,.3); text-decoration: none; transition: color .15s; }
+  .footer-links a:hover { color: rgba(255,255,255,.6); }
+
+  /* ── RESPONSIVE ───────────────────────────────── */
+  @media (max-width: 960px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .breadcrumb-bar { padding: 12px 20px; }
+    .page-hero { padding: 36px 20px; grid-template-columns: 1fr; }
+    .hero-stats { display: none; }
+    section { padding: 36px 20px; }
+    .partner-strip { padding: 24px 20px; }
+    .advisor-band { padding: 32px 20px; flex-direction: column; align-items: flex-start; }
+    footer { flex-direction: column; gap: 16px; padding: 24px 20px; }
+  }
+  @media (max-width: 680px) {
+    .cat-grid, .calc-grid, .art-grid { grid-template-columns: 1fr; }
+    .page-hero h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="logo">
+    <div class="logo-mark"><svg viewBox="0 0 16 16"><path d="M2 9L6 13L14 4"/></svg></div>
+    <div class="logo-text">one<span>click</span>advisor</div>
+  </a>
+  <div class="nav-links">
+    <a href="/tools">Tools and resources</a>
+    <a href="/start-your-business">Start a business</a>
+    <a href="/market-your-business">Market</a>
+    <a href="/finance-your-business" class="active">Finance</a>
+    <a href="/referral-network-listing">Find an expert</a>
+  </div>
+  <div class="nav-right">
+    <a href="/my-account" class="nav-login">My account</a>
+    <a href="/build-your-business" class="btn-primary">Get started free</a>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb-bar">
+  <a href="/">Home</a>
+  <span class="sep">/</span>
+  <span class="current">Finance your business</span>
+</div>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div>
+    <div class="hero-eyebrow"><span class="eyebrow-dot"></span>Finance your business</div>
+    <h1>Fund it and <strong>keep score</strong></h1>
+    <p>If marketing brings the customers in and operations keeps them, finance keeps score. This is the banking end of your business. Find and manage money, explore funding beyond the bank, and improve cash flow and profits in the business you have right now.</p>
+    <div class="hero-btns">
+      <a href="/finance-calculators" class="btn-primary">Open free finance calculators</a>
+      <a href="/affiliate-listing/?cat=23" class="btn-outline">Get funding</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat-item">
+      <div class="hero-stat-icon">
+        <svg viewBox="0 0 18 18"><circle cx="9" cy="9" r="7"/><path d="M9 5v4l3 2"/></svg>
+      </div>
+      <div>
+        <div class="hero-stat-label">Calculators</div>
+        <div class="hero-stat-val">Finance calculators, free</div>
+      </div>
+    </div>
+    <div class="hero-stat-item">
+      <div class="hero-stat-icon">
+        <svg viewBox="0 0 18 18"><rect x="2" y="4" width="14" height="11" rx="2"/><path d="M5 4V3M13 4V3M2 8h14"/></svg>
+      </div>
+      <div>
+        <div class="hero-stat-label">Resources</div>
+        <div class="hero-stat-val">Articles and guides, free</div>
+      </div>
+    </div>
+    <div class="hero-stat-item">
+      <div class="hero-stat-icon">
+        <svg viewBox="0 0 18 18"><circle cx="6" cy="6" r="3"/><circle cx="13" cy="6" r="3"/><path d="M1 16c0-2.5 2-4 5-4M12 16c0-2.5 2-4 5-4M7 13c0-1.5.8-2.5 2-2.5s2 1 2 2.5"/></svg>
+      </div>
+      <div>
+        <div class="hero-stat-label">Expert network</div>
+        <div class="hero-stat-val">Vetted finance advisors</div>
+      </div>
+    </div>
+    <div class="hero-stat-item">
+      <div class="hero-stat-icon">
+        <svg viewBox="0 0 18 18"><path d="M9 2l2 4.5h5l-4 3 1.5 5L9 12l-4.5 2.5 1.5-5-4-3h5z"/></svg>
+      </div>
+      <div>
+        <div class="hero-stat-label">Partner services</div>
+        <div class="hero-stat-val">Loans, grants, funding tools</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESOURCE CATEGORIES -->
+<section class="surf">
+  <div class="eyebrow">Browse finance topics</div>
+  <div class="sec-title">What do you need help with?</div>
+  <div class="sec-sub">Every resource and service below is labeled so you know exactly what it is and what it costs before you click.</div>
+
+  <div class="cat-grid">
+
+    <a href="/affiliate-listing/?cat=27" class="cat-card">
+      <div class="cat-top">
+        <div class="cat-icon">
+          <svg viewBox="0 0 18 18"><rect x="2" y="3" width="14" height="12" rx="2"/><path d="M5 7h8M5 10h5"/></svg>
+        </div>
+        <span class="pill pill-paid">Paid</span>
+      </div>
+      <div class="cat-title">Accounting software</div>
+      <div class="cat-desc">Tools to manage your books, track expenses, and run reports. QuickBooks and other vetted platforms.</div>
+      <div class="cat-link">Browse options</div>
+    </a>
+
+    <a href="/affiliate-listing/?cat=61" class="cat-card">
+      <div class="cat-top">
+        <div class="cat-icon">
+          <svg viewBox="0 0 18 18"><circle cx="9" cy="9" r="7"/><path d="M9 5v4l3 2"/></svg>
+        </div>
+        <span class="pill pill-book">Book a call</span>
+      </div>
+      <div class="cat-title">Business funding using retirement accounts</div>
+      <div class="cat-desc">Fund your business using ROBS (Rollover for Business Startups). A legal strategy to use retirement savings without penalties.</div>
+      <div class="cat-link">Learn more</div>
+    </a>
+
+    <a href="/affiliate-listing/?cat=66" class="cat-card">
+      <div class="cat-top">
+        <div class="cat-icon">
+          <svg viewBox="0 0 18 18"><path d="M2 14l4-4 3 3 4-5 3 2"/><circle cx="16" cy="4" r="2"/></svg>
+        </div>
+        <span class="pill pill-paid">Paid</span>
+      </div>
+      <div class="cat-title">Business valuation and benchmarking</div>
+      <div class="cat-desc">Understand what your business is worth and how it compares to others in your industry. Essential for funding, exit, or growth planning.</div>
+      <div class="cat-link">Browse services</div>
+    </a>
+
+    <a href="/affiliate-listing/?cat=65" class="cat-card">
+      <div class="cat-top">
+        <div class="cat-icon">
+          <svg viewBox="0 0 18 18"><path d="M9 2v14M5 6H3a2 2 0 000 4h2M13 6h2a2 2 0 010 4h-2M5 10h8"/></svg>
+        </div>
+        <span class="pill pill-free">Free to search</span>
+      </div>
+      <div class="cat-title">Grants</div>
+      <div class="cat-desc">Find grants for your business. OpenGrants and other platforms help you discover and apply for funding you do not have to pay back.</div>
+      <div class="cat-link">Search grants</div>
+    </a>
+
+    <a href="/affiliate-listing/?cat=23" class="cat-card">
+      <div class="cat-top">
+        <div class="cat-icon">
+          <svg viewBox="0 0 18 18"><rect x="2" y="5" width="14" height="10" rx="2"/><path d="M5 5V4a2 2 0 014 0v1M12 11a1 1 0 11-2 0 1 1 0 012 0z"/></svg>
+        </div>
+        <span class="pill pill-book">Book a call</span>
+      </div>
+      <div class="cat-title">Loans</div>
+      <div class="cat-desc">Business loans and lines of credit. Connect with vetted lenders and find the right financing structure for your stage and goals.</div>
+      <div class="cat-link">Explore loan options</div>
+    </a>
+
+    <a href="/finance-continued/" class="cat-card">
+      <div class="cat-top">
+        <div class="cat-icon">
+          <svg viewBox="0 0 18 18"><circle cx="9" cy="9" r="7"/><path d="M6 9h6M9 6v6"/></svg>
+        </div>
+        <span class="pill pill-free">Free to browse</span>
+      </div>
+      <div class="cat-title">Other small business financing</div>
+      <div class="cat-desc">Invoice factoring, revenue-based financing, angel investment, and more. Find the right model for your business.</div>
+      <div class="cat-link">See all financing options</div>
+    </a>
+
+  </div>
+</section>
+
+<!-- PARTNER STRIP -->
+<div class="partner-strip">
+  <div class="partner-label">Featured finance partners</div>
+  <div class="partner-logos">
+    <a href="https://quickbooks530203845490.atworkweb.com/sw/swchannel/registration/internet/registration.cfm?RegPageID=6614416&SWCAMPAIGNID=3356053" class="partner-logo" target="_blank" rel="noopener">
+      <div class="partner-logo-mark" style="background:#2CA01C;color:#fff">QB</div>
+      <span class="partner-logo-name">QuickBooks</span>
+    </a>
+    <a href="https://www.benetrends.com/one-click-advisor" class="partner-logo" target="_blank" rel="noopener">
+      <div class="partner-logo-mark" style="background:#003087;color:#fff">BT</div>
+      <span class="partner-logo-name">Benetrends</span>
+    </a>
+    <a href="https://uplyftcapital.sjv.io/VmQ5Pa" class="partner-logo" target="_blank" rel="noopener">
+      <div class="partner-logo-mark" style="background:#0D9488;color:#fff">UC</div>
+      <span class="partner-logo-name">Uplyft Capital</span>
+    </a>
+    <a href="https://www.bizminer.com/?aid=274" class="partner-logo" target="_blank" rel="noopener">
+      <div class="partner-logo-mark" style="background:#1D4ED8;color:#fff">BM</div>
+      <span class="partner-logo-name">Bizminer</span>
+    </a>
+    <a href="https://www.opengrants.io/one-click-advisor/" class="partner-logo" target="_blank" rel="noopener">
+      <div class="partner-logo-mark" style="background:#16A34A;color:#fff">OG</div>
+      <span class="partner-logo-name">OpenGrants</span>
+    </a>
+  </div>
+</div>
+
+<!-- CALCULATORS -->
+<section class="white">
+  <div class="eyebrow">Free tools</div>
+  <div class="sec-title">Finance calculators — open now, no account needed</div>
+  <div class="sec-sub">Every calculator below is free. Use it right now, no signup required.</div>
+
+  <div class="calc-grid">
+
+    <a href="/finance-calculators" class="calc-card">
+      <div class="calc-glyph">CF</div>
+      <div class="calc-body">
+        <span class="pill pill-free">Free</span>
+        <div class="calc-title">Cash flow calculator</div>
+        <div class="calc-desc">Project your monthly cash flow, identify shortfalls before they happen, and plan for growth. Essential for every stage of business.</div>
+        <div class="calc-cta">Open calculator</div>
+      </div>
+    </a>
+
+    <a href="/finance-calculators" class="calc-card">
+      <div class="calc-glyph">PM</div>
+      <div class="calc-body">
+        <span class="pill pill-free">Free</span>
+        <div class="calc-title">Profit margin calculator</div>
+        <div class="calc-desc">Calculate gross profit, net profit, and operating margins. Know whether your pricing is working before you scale.</div>
+        <div class="calc-cta">Open calculator</div>
+      </div>
+    </a>
+
+    <a href="/finance-calculators" class="calc-card">
+      <div class="calc-glyph">LR</div>
+      <div class="calc-body">
+        <span class="pill pill-free">Free</span>
+        <div class="calc-title">Loan repayment calculator</div>
+        <div class="calc-desc">Enter loan amount, rate, and term to see monthly payments and total interest cost. Compare scenarios before you borrow.</div>
+        <div class="calc-cta">Open calculator</div>
+      </div>
+    </a>
+
+    <a href="/finance-calculators" class="calc-card">
+      <div class="calc-glyph">BE</div>
+      <div class="calc-body">
+        <span class="pill pill-free">Free</span>
+        <div class="calc-title">Break-even calculator</div>
+        <div class="calc-desc">Find the revenue point where your business covers all its costs. Know your number before you launch or invest.</div>
+        <div class="calc-cta">Open calculator</div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ADVISOR CTA BAND -->
+<div class="advisor-band">
+  <div class="advisor-band-left">
+    <h2>Have questions? Speak with an advisor today.</h2>
+    <p>James Chittenden and our network of vetted finance professionals can help you find the right funding strategy, understand your numbers, and plan your next move.</p>
+  </div>
+  <a href="/contact" class="btn-advisor">Book a conversation</a>
+</div>
+
+<!-- ARTICLES -->
+<section class="surf">
+  <div class="eyebrow">Finance resources</div>
+  <div class="sec-title">Free articles and guides</div>
+  <div class="sec-sub">The latest finance knowledge from James and our contributor network — all free.</div>
+
+  <div class="art-grid">
+
+    <a href="/ai-and-business-loans-still-our-servant-not-yet-our-master/" class="art-card">
+      <div class="art-meta">
+        <span class="art-cat">Finance</span>
+        <span class="art-date">Jan 30, 2026</span>
+      </div>
+      <div class="art-title">AI and business loans: still our servant, not yet our master</div>
+      <div class="art-excerpt">How AI is starting to shape the business lending landscape, what it can and cannot do yet, and how small business owners can use it to their advantage.</div>
+      <div class="art-author">By James Chittenden</div>
+      <div class="art-read">Read article</div>
+    </a>
+
+    <a href="/your-new-taxes/" class="art-card">
+      <div class="art-meta">
+        <span class="art-cat">Finance / Tax</span>
+        <span class="art-date">Jul 10, 2025</span>
+      </div>
+      <div class="art-title">One Big Beautiful Bill explained: your taxes in 2025</div>
+      <div class="art-excerpt">A plain-language breakdown of the key tax provisions in the new law, what changed, and what it means for small business owners and entrepreneurs.</div>
+      <div class="art-author">By Jeff Skolnick, CPA</div>
+      <div class="art-read">Read article</div>
+    </a>
+
+    <a href="/tax-problems-tax-requirements-and-tax-solutions/" class="art-card">
+      <div class="art-meta">
+        <span class="art-cat">Finance / Tax</span>
+        <span class="art-date">Mar 30, 2025</span>
+      </div>
+      <div class="art-title">Tax problems, tax requirements, and tax solutions</div>
+      <div class="art-excerpt">Tax season looms large for small business owners. A practical guide to the most common problems and how to get ahead of them before they cost you.</div>
+      <div class="art-author">By James Chittenden</div>
+      <div class="art-read">Read article</div>
+    </a>
+
+    <a href="/category/finance/" class="art-card">
+      <div class="art-meta">
+        <span class="art-cat">Finance</span>
+      </div>
+      <div class="art-title">3 QuickBooks tools every small business should use for tax season success</div>
+      <div class="art-excerpt">The QuickBooks features most small business owners overlook that can save hours of work and reduce costly errors during tax season.</div>
+      <div class="art-author">By James Chittenden</div>
+      <div class="art-read">Read article</div>
+    </a>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="/" class="footer-logo">
+    <div class="footer-mark"><svg viewBox="0 0 13 13"><path d="M2 7L5.5 10.5L11 3.5"/></svg></div>
+    <span class="footer-name">oneclickadvisor.com</span>
+  </a>
+  <div class="footer-links">
+    <a href="/privacy-policy">Privacy</a>
+    <a href="/refund-policy">Refund policy</a>
+    <a href="/how-we-fund-our-services/">Affiliate disclosure</a>
+    <a href="/contact-us">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>
